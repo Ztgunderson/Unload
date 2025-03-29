@@ -1,6 +1,6 @@
-# Welcome to your Expo app 👋
+# React Native Packages for AI Voice Journal
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This document outlines the key React Native packages we'll focus on for the AI Voice Journal project, along with relevant documentation links.
 
 ## Get started
 
@@ -25,26 +25,65 @@ In the output, you'll find options to open the app in a
 
 You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
-## Get a fresh project
+## Core React Native & Expo Packages
 
-When you're ready, run:
+* **React Native:**
+    * The base framework for building cross-platform mobile applications.
+    * Documentation: [React Native Documentation](https://reactnative.dev/docs/getting-started)
+* **Expo:**
+    * A framework and platform for universal React applications. Simplifies development, build, and deployment.
+    * Documentation: [Expo Documentation](https://docs.expo.dev/)
+    * `npx create-expo-app` will be used to create the base project.
+* **Firebase JS SDK:**
+    * For interacting with Firebase services like Cloud Firestore (data storage) and potentially Firebase Storage (audio file storage).
+    * `npx expo install firebase`
+    * Documentation: [Firebase JS SDK](https://firebase.google.com/docs/web/setup)
+* **@react-navigation/native:**
+    * Used for navigation between different screens in the app.
+    * `npx expo install @react-navigation/native @react-navigation/stack`
+    * Documentation: [React Navigation](https://reactnavigation.org/docs/getting-started)
 
-```bash
-npm run reset-project
-```
+## Voice Functionality
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+* **Web Speech API (via WebView):**
+    * For voice recording and transcription. Integrated via a WebView component.
+    * Documentation: [Web Speech API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API)
+    * React native webview: [React Native WebView](https://reactnative.dev/docs/webview)
+* **Potential Alternative: @react-native-voice/voice or expo-speech-recognition:**
+    * Considered for potentially higher accuracy and native device integration, but may add complexity.
+    * Documentation:
+        * [@react-native-voice/voice](https://github.com/react-native-voice/voice)
+        * [expo-speech-recognition](https://docs.expo.dev/versions/latest/sdk/speech/)
 
-## Learn more
+## AI Integration
 
-To learn more about developing your project with Expo, look at the following resources:
+* **Anthropic Claude API (via HTTP requests):**
+    * For text summarization, emotional analysis, and pattern recognition.
+    * Documentation:
+        * [Anthropic Claude API Documentation](https://console.anthropic.com/docs/)
+        * [Anthropic API Postman](https://www.postman.com/postman/anthropic-apis/documentation/dhus72s/claude-api)
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Data Management & Vector Database
 
-## Join the community
+* **Cloud Firestore (Firebase):**
+    * NoSQL document database for storing journal entries and metadata.
+    * Documentation: [Cloud Firestore Documentation](https://firebase.google.com/docs/firestore)
+* **ChromaDB (Potential Vector Database):**
+    * For semantic search and similarity matching of journal entries, if vector database functionality is implemented.
+    * Documentation: [ChromaDB Documentation](https://www.trychroma.com/docs)
 
-Join our community of developers creating universal apps.
+## Additional Considerations
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+* **Async Storage:**
+    * For local data storage (e.g., user settings).
+    * `npx expo install @react-native-async-storage/async-storage`
+    * Documentation: [Async Storage](https://reactnative.dev/docs/asyncstorage)
+* **UI Libraries (Optional):**
+    * Consider using UI libraries like React Native Paper or React Native Elements for pre-built components.
+    * React Native Paper: [React Native Paper](https://reactnativepaper.com/)
+    * React Native Elements: [React Native Elements](https://reactnativeelements.com/)
+* **Axios or Fetch:**
+    * For making HTTP requests to the Anthropic Claude API.
+    * Documentation:
+        * [Axios](https://axios-http.com/docs/intro)
+        * [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
