@@ -78,26 +78,25 @@ We'll use Cloud Firestore for our database. Since each user has their own collec
 
 ```
 collections: {
-users: { // Not strictly needed, but can be used for user profiles later
-userId: { // Unique user ID
-// User profile data (if needed)
-}
-},
-journalEntries: {
-userId: { // Unique user ID (creates a subcollection for each user)
-entryId: { // Unique ID for each journal entry
-date: Timestamp, // Date of the journal entry
-entryId: String, // Special ID for the entry (same as the document ID)
-mainEmotion: String, // Main emotion expressed
-secondaryEmotions: Array<String>, // Array of secondary emotions
-emotionSummary: String, // Summary of emotions felt
-topicSummary: String, // Summary of topics discussed
-positivePoint: String, // Positive point of the day
-fullText: String, // Full text of the journal entry
-audioUrl: String, // URL of the audio recording (if using Firebase Storage)
-}
-}
-}
+   users: { // Not strictly needed, but can be used for user profiles later
+      userId: { // Unique user ID
+         // User profile data (if needed)
+         }
+      },
+   journalEntries: {
+      userId: { // Unique user ID (creates a subcollection for each user)
+         entryId: { // Unique ID for each journal entry
+            date: Timestamp, // Date of the journal entry
+            entryId: String, // Special ID for the entry (same as the document ID)
+            mainEmotion: String, // Main emotion expressed
+            secondaryEmotions: Array<String>, // Array of secondary emotions
+            emotionSummary: String, // Summary of emotions felt
+            topicSummary: String, // Summary of topics discussed
+            positivePoint: String, // Positive point of the day
+            fullText: String, // Full text of the journal entry
+         }
+      }
+   }
 }
 ```
 
