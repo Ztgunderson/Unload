@@ -72,6 +72,55 @@ You can start developing by editing the files inside the **app** directory. This
     * For semantic search and similarity matching of journal entries, if vector database functionality is implemented.
     * Documentation: [ChromaDB Documentation](https://www.trychroma.com/docs)
 
+### Firebase Schema
+
+We'll use Cloud Firestore for our database. Since each user has their own collection of journal entries, we'll organize it as follows:
+
+```
+collections: {
+users: { // Not strictly needed, but can be used for user profiles later
+userId: { // Unique user ID
+// User profile data (if needed)
+}
+},
+journalEntries: {
+userId: { // Unique user ID (creates a subcollection for each user)
+entryId: { // Unique ID for each journal entry
+date: Timestamp, // Date of the journal entry
+entryId: String, // Special ID for the entry (same as the document ID)
+mainEmotion: String, // Main emotion expressed
+secondaryEmotions: Array<String>, // Array of secondary emotions
+emotionSummary: String, // Summary of emotions felt
+topicSummary: String, // Summary of topics discussed
+positivePoint: String, // Positive point of the day
+fullText: String, // Full text of the journal entry
+audioUrl: String, // URL of the audio recording (if using Firebase Storage)
+}
+}
+}
+}
+```
+
+**Explanation:**
+
+* **`users` Collection (Optional):**
+    * This collection can store user profile information if needed.
+    * Each document in this collection represents a user, with the document ID being the user's unique ID.
+* **`journalEntries` Collection:**
+    * This collection stores the journal entries.
+    * Each user gets their own subcollection within `journalEntries`, named after their `userId`.
+    * Each journal entry is a document within the user's subcollection, with the document ID being a unique `entryId`.
+    * The fields within each journal entry document include:
+        * `date`: A Firebase `Timestamp` representing the date and time of the entry.
+        * `entryId`: A string that is the unique ID of the document.
+        * `mainEmotion`: A string representing the primary emotion expressed.
+        * `secondaryEmotions`: An array of strings representing all other emotions.
+        * `emotionSummary`: A string summarizing the emotions felt.
+        * `topicSummary`: A string summarizing the topics discussed.
+        * `positivePoint`: A string describing a positive point of the day.
+        * `fullText`: The full transcribed text of the journal entry.
+
+
 ## Additional Considerations
 
 * **Async Storage:**
