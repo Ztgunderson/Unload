@@ -33,13 +33,13 @@ const AppNavigator: React.FC<AppNavigatorProps> = ({ userId }) => {
       >
         <Stack.Screen
           name="VoiceJournal"
-          component={VoiceJournalScreen}
+          component={(props: any) => <VoiceJournalScreen {...props} userId={userId} />}
           initialParams={{ userId }}
           options={{ title: 'Voice Journal' }}
         />
         <Stack.Screen
           name="Calendar"
-          component={CalendarScreen}
+          component={CalendarScreen as React.FC<any>}
           initialParams={{ userId }}
           options={{ title: 'Journal Calendar' }}
         />

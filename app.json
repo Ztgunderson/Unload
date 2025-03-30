@@ -13,7 +13,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.anonymous.Unload"
@@ -21,8 +21,11 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/icon.png"
     },
+    "assetBundlePatterns": [
+      "assets/images/*"
+    ],
     "plugins": [
       "expo-router",
       [
@@ -33,7 +36,9 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ]
+      ],
+      "expo-asset",
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true

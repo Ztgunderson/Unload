@@ -3,19 +3,21 @@
 
 import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, Text } from 'react-native';
-import { firebase } from '../../services/firebaseConfig';
+import { db, auth, Timestamp } from '../../services/firebase/config';
+import { collection, doc, setDoc } from 'firebase/firestore';
 import Button from '../common/Button';
 import ErrorMessage from '../common/ErrorMessage';
 import LoadingOverlay from '../common/LoadingOverlay';
 
 interface JournalFormProps {
   transcribedText: string;
-  onSave: () => void; // Callback when save is successful
+  onSave: () => void;
+  userId: string;
 }
 
 interface JournalEntryData {
   userId: string;
-  date: firebase.firestore.Timestamp;
+  date: Timestamp;
   mainEmotion: string;
   secondaryEmotions: string[];
   emotionSummary: string;
@@ -38,23 +40,18 @@ const JournalForm: React.FC<JournalFormProps> = ({ transcribedText, onSave }) =>
       setError('Main emotion and transcribed text are required');
       return;
     }
-
+  
     setIsSaving(true);
     setError('');
-
+  
     try {
-      const userId = firebase.auth().currentUser?.uid; // Assuming user is authenticated
-      if (!userId) throw new Error('User not authenticated');
-
-      const entryRef = firebase.firestore()
-        .collection('journalEntries')
-        .doc(userId)
-        .collection('entries')
-        .doc();
-
+      if (!userId) throw new Error('User ID is required');
+  
+      const entryRef = doc(collection(doc(collection(db, 'journalEntries'), userId), 'entries'));
+  
       const entryData: JournalEntryData = {
         userId,
-        date: firebase.firestore.Timestamp.now(),
+        date: Timestamp.now(),
         mainEmotion,
         secondaryEmotions: secondaryEmotions.split(',').map(e => e.trim()),
         emotionSummary,
@@ -62,9 +59,9 @@ const JournalForm: React.FC<JournalFormProps> = ({ transcribedText, onSave }) =>
         positivePoint,
         fullText: transcribedText
       };
-
-      await entryRef.set(entryData);
-      onSave(); // Notify parent component of successful save
+  
+      await setDoc(entryRef, entryData);
+      onSave();
       clearForm();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to save entry');
