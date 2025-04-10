@@ -2,9 +2,13 @@
 // Main application entry point
 // Wraps the entire app with NavigationContainer and provides navigation structure
 
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import AppNavigator from './src/navigation/AppNavigator';
+import { Slot } from 'expo-router';
+import { useEffect } from 'react';
+import { useFonts } from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
+
+// Keep the splash screen visible while we fetch resources
+SplashScreen.preventAutoHideAsync();
 
 /**
  * Main App Component
@@ -19,15 +23,20 @@ import AppNavigator from './src/navigation/AppNavigator';
  * AppNavigator contains the stack navigation structure
  * User ID should come from your authentication system
  */
-const App = () => {
-  // In a real application, get userId from authentication context/provider
-  const userId = 'test-user-id'; // Replace with actual authentication logic
-  
-  return (
-    <NavigationContainer>
-      <AppNavigator userId={userId} />
-    </NavigationContainer>
-  );
-};
+export default function App() {
+  const [fontsLoaded] = useFonts({
+    // Add your custom fonts here if needed
+  });
 
-export default App;
+  useEffect(() => {
+    if (fontsLoaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
+  return <Slot />;
+}

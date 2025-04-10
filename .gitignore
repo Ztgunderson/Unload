@@ -2,40 +2,105 @@
 
 # dependencies
 node_modules/
+/.pnp
+.pnp.js
+yarn.lock
+package-lock.json
 
 # Expo
 .expo/
 dist/
 web-build/
 expo-env.d.ts
-
-# Native
-*.orig.*
 *.jks
 *.p8
 *.p12
 *.key
 *.mobileprovision
+*.orig.*
+*.apk
+*.aab
+*.ipa
+
+# Native
+ios/Pods/
+ios/build/
+android/app/build/
+android/.gradle/
+android/local.properties
+android/captures/
+android/app/debug
+android/app/release
 
 # Metro
 .metro-health-check*
+metro.config.js.local
 
 # debug
 npm-debug.*
 yarn-debug.*
 yarn-error.*
+*.log
 
 # macOS
 .DS_Store
 *.pem
+.AppleDouble
+.LSOverride
+._*
 
 # local env files
 .env*.local
+.env
+.env.development
+.env.test
+.env.production
 
 # typescript
 *.tsbuildinfo
 
-app-example
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Testing
+coverage/
+__tests__/__snapshots__/
+
+# Bundle
+*.bundle
+*.jsbundle
+
+# Ruby
+vendor/
+.bundle/
+Gemfile.lock
 
 # Other
-.env
+*.orig
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+app-example
