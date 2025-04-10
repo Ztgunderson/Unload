@@ -1,4 +1,4 @@
-// C:\Users\Talks\Documents\AI-Health-Agent\Unload\app\index.tsx
+// \Unload\app\index.tsx
 
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Link } from 'expo-router';

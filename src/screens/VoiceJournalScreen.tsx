@@ -7,7 +7,7 @@ import VoiceRecorder from '../components/journal/VoiceRecorder';
 import JournalForm from '../components/journal/JournalForm';
 
 interface VoiceJournalScreenProps {
-  userId: string; // Passed from parent component/navigation
+  userId: string;
 }
 
 const VoiceJournalScreen: React.FC<VoiceJournalScreenProps> = ({ userId }) => {
@@ -22,7 +22,7 @@ const VoiceJournalScreen: React.FC<VoiceJournalScreenProps> = ({ userId }) => {
       contentContainerStyle={styles.container}
       keyboardShouldPersistTaps="handled"
     >
-      <VoiceRecorder onTranscription={setTranscribedText} />
+      <VoiceRecorder onTranscription={(text) => console.log('Transcribed text:', text)}/>
       
       <JournalForm 
         transcribedText={transcribedText}

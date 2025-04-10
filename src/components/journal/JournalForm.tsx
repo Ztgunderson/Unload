@@ -26,7 +26,7 @@ interface JournalEntryData {
   fullText: string;
 }
 
-const JournalForm: React.FC<JournalFormProps> = ({ transcribedText, onSave }) => {
+const JournalForm: React.FC<JournalFormProps> = ({ transcribedText, onSave, userId }) => {
   const [mainEmotion, setMainEmotion] = useState('');
   const [secondaryEmotions, setSecondaryEmotions] = useState('');
   const [emotionSummary, setEmotionSummary] = useState('');
