@@ -7,8 +7,15 @@ import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 export type RootStackParamList = {
-  VoiceJournal: { userId: string };
-  Calendar: { userId: string };
+  MainTabs: undefined;
+  Login: undefined;
+};
+
+export type MainTabParamList = {
+  JournalList: undefined;
+  NewEntry: undefined;
+  Calendar: undefined;
+  Profile: undefined;
 };
 
 export type StackNavigationProps<T extends keyof RootStackParamList> = {
@@ -16,4 +23,4 @@ export type StackNavigationProps<T extends keyof RootStackParamList> = {
   route: RouteProp<RootStackParamList, T>;
 };
 
-export type RouteNames = keyof RootStackParamList;
+export type RouteNames = keyof RootStackParamList | keyof MainTabParamList;
