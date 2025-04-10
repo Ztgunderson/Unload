@@ -1,14 +1,13 @@
 {
   "expo": {
     "name": "Unload",
-    "slug": "Unload",
+    "slug": "unload",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
-    "userInterfaceStyle": "automatic",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,31 +16,26 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.Unload"
+      "bundleIdentifier": "com.yourcompany.unload"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/icon.png",
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.anonymous.Unload"
+      "package": "com.yourcompany.unload"
     },
     "web": {
-      "favicon": "./assets/images/icon.png"
+      "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      "expo-router",
-      [
-        "expo-splash-screen",
-        {
-          "image": "./assets/images/splash.png",
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
-        }
-      ]
-    ],
-    "experiments": {
-      "typedRoutes": true
+    "scheme": "unload",
+    "extra": {
+      "firebaseApiKey": "YOUR_FIREBASE_API_KEY",
+      "firebaseAuthDomain": "YOUR_FIREBASE_AUTH_DOMAIN",
+      "firebaseProjectId": "YOUR_FIREBASE_PROJECT_ID",
+      "firebaseStorageBucket": "YOUR_FIREBASE_STORAGE_BUCKET",
+      "firebaseMessagingSenderId": "YOUR_FIREBASE_MESSAGING_SENDER_ID",
+      "firebaseAppId": "YOUR_FIREBASE_APP_ID"
     }
   }
 }

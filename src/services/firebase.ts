@@ -1,6 +1,8 @@
 import { Platform } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 import Constants from 'expo-constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
 
 // Import Firebase based on platform
 let auth: any;
@@ -45,8 +47,13 @@ WebBrowser.maybeCompleteAuthSession();
 export const initializeFirebase = async () => {
   try {
     if (Platform.OS === 'web') {
+      const app = firebase.initializeApp(firebaseConfig);
+      const authInstance = initializeAuth(app, {
+        persistence: getReactNativePersistence(AsyncStorage)
+      });
+      
       return {
-        auth: auth(),
+        auth: authInstance,
         firestore: firestore(),
         functions: functions()
       };

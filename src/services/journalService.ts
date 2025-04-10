@@ -1,8 +1,7 @@
-import { getFirestore, collection, addDoc, updateDoc, doc, query, where, getDocs, deleteDoc, Timestamp } from 'firebase/firestore';
-import { getFunctions, httpsCallable } from 'firebase/functions';
+import { getFirestore, collection, addDoc, updateDoc, doc, query, where, getDocs, deleteDoc, Timestamp, getDoc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
-import { initializeFirebase } from '../config/firebase';
 import { firestore } from './firebase';
+import NLPService from './NLPService';
 
 interface AnalysisResult {
   sentiment: {
@@ -45,56 +44,105 @@ export interface JournalEntry {
   };
 }
 
-// Mock data
-const mockEntries: JournalEntry[] = [
-  {
-    id: '1',
-    title: 'First Entry',
-    content: 'This is my first journal entry.',
-    createdAt: new Date(),
-    userId: 'mock-user-id',
-    sentiment: {
-      score: 0.5,
-      magnitude: 0.8
-    }
-  },
-  {
-    id: '2',
-    title: 'Second Entry',
-    content: 'This is my second journal entry.',
-    createdAt: new Date(),
-    userId: 'mock-user-id',
-    sentiment: {
-      score: 0.3,
-      magnitude: 0.6
-    }
-  }
-];
-
 export const getJournalEntries = async (date?: Date) => {
-  // Simulate network delay
-  await new Promise(resolve => setTimeout(resolve, 500));
-  return mockEntries;
+  try {
+    const userId = getAuth().currentUser?.uid;
+    if (!userId) throw new Error('User not authenticated');
+
+    const entriesRef = collection(firestore, 'journals');
+    let q = query(entriesRef, where('userId', '==', userId));
+    
+    if (date) {
+      const startOfDay = new Date(date);
+      startOfDay.setHours(0, 0, 0, 0);
+      const endOfDay = new Date(date);
+      endOfDay.setHours(23, 59, 59, 999);
+      
+      q = query(q, 
+        where('createdAt', '>=', Timestamp.fromDate(startOfDay)),
+        where('createdAt', '<=', Timestamp.fromDate(endOfDay))
+      );
+    }
+
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+      createdAt: doc.data().createdAt.toDate()
+    })) as JournalEntry[];
+  } catch (error) {
+    console.error('Error fetching journal entries:', error);
+    throw error;
+  }
 };
 
 export const createJournalEntry = async (entry: Omit<JournalEntry, 'id' | 'createdAt' | 'userId'>) => {
-  // Simulate network delay
-  await new Promise(resolve => setTimeout(resolve, 500));
-  const newEntry: JournalEntry = {
-    ...entry,
-    id: Date.now().toString(),
-    createdAt: new Date(),
-    userId: 'mock-user-id'
-  };
-  mockEntries.push(newEntry);
-  return newEntry;
+  try {
+    const userId = getAuth().currentUser?.uid;
+    if (!userId) throw new Error('User not authenticated');
+
+    // Analyze the text using Google Cloud NLP
+    const analysis = await NLPService.analyzeText(entry.content);
+
+    const newEntry = {
+      ...entry,
+      createdAt: Timestamp.now(),
+      userId,
+      sentiment: analysis.sentiment,
+      entities: analysis.entities,
+      syntax: analysis.syntax
+    };
+
+    const docRef = await addDoc(collection(firestore, 'journals'), newEntry);
+    return {
+      id: docRef.id,
+      ...newEntry,
+      createdAt: newEntry.createdAt.toDate()
+    } as JournalEntry;
+  } catch (error) {
+    console.error('Error creating journal entry:', error);
+    throw error;
+  }
 };
 
 export const deleteJournalEntry = async (entryId: string) => {
-  // Simulate network delay
-  await new Promise(resolve => setTimeout(resolve, 500));
-  const index = mockEntries.findIndex(entry => entry.id === entryId);
-  if (index !== -1) {
-    mockEntries.splice(index, 1);
+  try {
+    const userId = getAuth().currentUser?.uid;
+    if (!userId) throw new Error('User not authenticated');
+
+    const entryRef = doc(firestore, 'journals', entryId);
+    const entryDoc = await getDoc(entryRef);
+    
+    if (!entryDoc.exists()) throw new Error('Entry not found');
+    if (entryDoc.data().userId !== userId) throw new Error('Unauthorized');
+
+    await deleteDoc(entryRef);
+  } catch (error) {
+    console.error('Error deleting journal entry:', error);
+    throw error;
+  }
+};
+
+export const getJournalEntriesByDateRange = async (startDate: Date, endDate: Date) => {
+  try {
+    const userId = getAuth().currentUser?.uid;
+    if (!userId) throw new Error('User not authenticated');
+
+    const entriesRef = collection(firestore, 'journals');
+    const q = query(entriesRef,
+      where('userId', '==', userId),
+      where('createdAt', '>=', Timestamp.fromDate(startDate)),
+      where('createdAt', '<=', Timestamp.fromDate(endDate))
+    );
+
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+      createdAt: doc.data().createdAt.toDate()
+    })) as JournalEntry[];
+  } catch (error) {
+    console.error('Error fetching journal entries by date range:', error);
+    throw error;
   }
 }; 
